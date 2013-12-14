@@ -3,14 +3,14 @@ package tests;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import game.GameModel;
+import game.model.GameModel;
 
 /**
  * Created by rkh on 2013-12-13.
  */
 public class GameModelTest {
 
-    private String filename = "assets/words.txt";
+    private String filename = "src/tests/test.txt";
     private GameModel sut;
 
     @Before
@@ -20,17 +20,16 @@ public class GameModelTest {
 
     @Test
     public void testGuessCharacterEmptyList() {
-        Character guess = 'a';
-        boolean expected = false;
-        boolean actual = sut.guessCharacter(guess);
+        char[] guess = {'a'};
+        boolean actual = sut.guess(guess);
 
-        Assert.assertEquals(expected, actual);
+        Assert.assertFalse(actual);
     }
 
     @Test
     public void testGuessCharacterAfterTwoEqualGuesses() {
-        sut.guessCharacter('a');
-        sut.guessCharacter('a');
+        sut.guess(new char[] {'a'});
+        sut.guess(new char[] {'a'});
 
         int expected = 1;
         int actual = sut.getNumberOfGuesses();
@@ -40,20 +39,18 @@ public class GameModelTest {
 
     @Test
     public void testValidGuessValidInput() {
-        Character guess = 'd';
-        boolean expected = true;
+        char[] guess = {'d'};
         boolean actual = sut.validGuess(guess);
 
-        Assert.assertEquals(expected, actual);
+        Assert.assertTrue(actual);
     }
 
     @Test
     public void testValidGuessInvalidInput() {
-        Character guess = 63; // 63 == '?'
-        boolean expected = false;
+        char[] guess = {63}; // 63 == '?'
         boolean actual = sut.validGuess(guess);
 
-        Assert.assertEquals(expected, actual);
+        Assert.assertFalse(actual);
     }
 
     @Test
@@ -67,13 +64,19 @@ public class GameModelTest {
     @Test
          public void testGetNumberOfGuessesWith2Guesses() {
         //guess twice
-        sut.guessCharacter('a');
-        sut.guessCharacter('b');
+        sut.guess(new char[] {'a'});
+        sut.guess(new char[] {'b'});
 
         int expected = 2;
         int actual = sut.getNumberOfGuesses();
 
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGuessWordRightWord() {
+        boolean actual = sut.guess("Banana".toCharArray());
+        Assert.assertTrue(actual);
     }
 
 }

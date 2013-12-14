@@ -1,4 +1,4 @@
-package game;
+package game.model;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -12,10 +12,12 @@ import java.util.Random;
  */
 public class WordModel {
 
+    private ArrayList<Character> mGuessedCharacters;
     private String mSecretWord;
     private Random rand;
 
     public WordModel() {
+        mGuessedCharacters = new ArrayList<Character>(10);
         rand = new Random();
     }
 
@@ -31,6 +33,36 @@ public class WordModel {
             }
         }
         return false;
+    }
+
+    public boolean guessWord(char[] guess) {
+        if (guess.length != mSecretWord.length()) return false;
+
+        for(int i=0; i < mSecretWord.length(); i++) {
+            if (toLowerCase(mSecretWord.toCharArray()[i]) != toLowerCase(guess[i])) return false;
+        }
+
+        return true;
+    }
+
+    public boolean guessCharacter(char guess) {
+        boolean found = false;
+        char guessToLower = toLowerCase(guess);
+
+        //check for old guesses
+        for(char old : mGuessedCharacters) {
+            if (old == guessToLower) {
+                found = true;
+                break;
+            }
+        }
+
+        //add guess
+        if (!found) {
+            mGuessedCharacters.add(guessToLower);
+        }
+
+        return found;
     }
 
     public char toLowerCase(char old) {
@@ -51,5 +83,9 @@ public class WordModel {
         br.close();
 
         return list;
+    }
+
+    public int getGuessedCharacterSize() {
+        return mGuessedCharacters.size();
     }
 }

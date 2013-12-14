@@ -1,6 +1,6 @@
 package tests;
 
-import game.WordModel;
+import game.model.WordModel;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,18 +51,16 @@ public class WordModelTest {
     public void testDoWordContainCharRightdGuess() {
         sut.createSecretWordFromList(new ArrayList<String>() {{ add("Test"); }});
         boolean actual = sut.doWordContainChar('e');
-        boolean expected = true;
 
-        Assert.assertEquals(expected, actual);
+        Assert.assertTrue(actual);
     }
 
     @Test
     public void testDoWordContainCharWrongGuess() {
         sut.createSecretWordFromList(new ArrayList<String>() {{ add("Test"); }});
         boolean actual = sut.doWordContainChar('a');
-        boolean expected = false;
 
-        Assert.assertEquals(expected, actual);
+        Assert.assertFalse(actual);
     }
 
     @Test
