@@ -22,6 +22,6 @@ public class Main extends Application {
         stage.show();
 
         GameController master = (GameController)loader.getController();
-        master.setStage(stage);
+        master.setupStage(stage);
     }
 }

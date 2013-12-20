@@ -1,9 +1,6 @@
 package game.model;
 
-import game.model.WordModel;
-
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by rkh on 2013-12-13.
@@ -11,21 +8,31 @@ import java.util.ArrayList;
 public class GameModel {
 
     private WordModel mWordModel;
+    private int mMaxNumberOfGuesses;
+    private int mGuesses = 0;
 
-    public GameModel(String filename) throws IOException {
-        mWordModel = new WordModel();
-        mWordModel.createSecretWordFromList(mWordModel.readFile(filename));
+    public GameModel(WordModel wordmodel, int maxNumberOfGuesses) throws IOException {
+        mWordModel = wordmodel;
+        mMaxNumberOfGuesses = maxNumberOfGuesses;
     }
 
     public boolean guess(char[] guess) {
         if (guess.length > 1) {
+            mGuesses++;
             return mWordModel.guessWord(guess);
         } else {
-            return mWordModel.guessCharacter(guess[0]);
+            boolean ret = false;
+            if (!mWordModel.isGuessedCharacter(guess[0])) {
+                mGuesses++;
+                ret = mWordModel.doWordContainChar(guess[0]);
+            }
+            return ret;
         }
     }
 
     public boolean validGuess(char[] guess) {
+        if (guess.length == 0) return false;
+
         for(char ch : guess) {
             char lower = mWordModel.toLowerCase(ch);
             if (lower < 'a' || lower > 'z') return false;
@@ -34,7 +41,22 @@ public class GameModel {
     }
 
     public int getNumberOfGuesses() {
-        return mWordModel.getGuessedCharacterSize();
+        return mGuesses;
     }
 
+    public int getMaxNumberOfGuesses() {
+        return mMaxNumberOfGuesses;
+    }
+
+    public String getSecretWordWithGuessedChars() {
+        return mWordModel.getSecretWordWithGuessedChars();
+    }
+
+    public String getGuessedChars() {
+        return mWordModel.getGuessedChars();
+    }
+
+    public String getSecretWord() {
+        return mWordModel.getSecretWord();
+    }
 }

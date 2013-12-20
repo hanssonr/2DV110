@@ -48,7 +48,7 @@ public class WordModelTest {
     }
 
     @Test
-    public void testDoWordContainCharRightdGuess() {
+    public void testDoWordContainCharRightGuess() {
         sut.createSecretWordFromList(new ArrayList<String>() {{ add("Test"); }});
         boolean actual = sut.doWordContainChar('e');
 
@@ -61,6 +61,14 @@ public class WordModelTest {
         boolean actual = sut.doWordContainChar('a');
 
         Assert.assertFalse(actual);
+    }
+
+    @Test
+    public void testDoWordContainCharUpperChar() {
+        sut.createSecretWordFromList(new ArrayList<String>() {{ add("Kiwi"); }});
+        boolean actual = sut.doWordContainChar('W');
+
+        Assert.assertTrue(actual);
     }
 
     @Test
@@ -86,6 +94,32 @@ public class WordModelTest {
         Character guess = 'A';
         Character expected = 'a';
         Character actual = sut.toLowerCase(guess);
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetSecretWordWithGuessedChars() throws IOException {
+        //secret word == Banana
+        sut.createSecretWordFromList(sut.readFile("src/tests/test.txt"));
+        sut.isGuessedCharacter('a');
+
+        String expected = "*a*a*a";
+        String actual = sut.getSecretWordWithGuessedChars();
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetSecretWordWithGuessedCharsFullWord() throws IOException {
+        //secret word == Banana
+        sut.createSecretWordFromList(sut.readFile("src/tests/test.txt"));
+        sut.isGuessedCharacter('b');
+        sut.isGuessedCharacter('a');
+        sut.isGuessedCharacter('n');
+
+        String expected = "Banana";
+        String actual = sut.getSecretWordWithGuessedChars();
 
         Assert.assertEquals(expected, actual);
     }

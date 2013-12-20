@@ -1,10 +1,10 @@
 package game.model;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -12,14 +12,9 @@ import java.util.Random;
  */
 public class WordModel {
 
-    private ArrayList<Character> mGuessedCharacters;
+    private ArrayList<Character> mGuessedCharacters = new ArrayList<Character>();
     private String mSecretWord;
-    private Random rand;
-
-    public WordModel() {
-        mGuessedCharacters = new ArrayList<Character>(10);
-        rand = new Random();
-    }
+    private Random rand = new Random();
 
     public void createSecretWordFromList(ArrayList<String> words) throws IllegalArgumentException {
         if (words.size() == 0) throw new IllegalArgumentException("List size must be greater than zero");
@@ -27,8 +22,8 @@ public class WordModel {
     }
 
     public boolean doWordContainChar(char ch) {
-        for(Character wordch : mSecretWord.toCharArray()) {
-            if (toLowerCase(wordch) == ch) {
+        for(char wordchar : mSecretWord.toCharArray()) {
+            if (toLowerCase(wordchar) == toLowerCase(ch)) {
                 return true;
             }
         }
@@ -45,7 +40,7 @@ public class WordModel {
         return true;
     }
 
-    public boolean guessCharacter(char guess) {
+    public boolean isGuessedCharacter(char guess) {
         boolean found = false;
         char guessToLower = toLowerCase(guess);
 
@@ -65,16 +60,30 @@ public class WordModel {
         return found;
     }
 
+    public String getSecretWordWithGuessedChars() {
+        char[] ret = new char[mSecretWord.length()];
+        char[] secret = mSecretWord.toCharArray();
+        Arrays.fill(ret, '*');
+
+        for(char guess : mGuessedCharacters) {
+            for (int i = 0; i < mSecretWord.length(); i++) {
+                if (toLowerCase(secret[i]) == guess) {
+                    ret[i] = secret[i];
+                }
+            }
+        }
+
+        return new String(ret);
+    }
+
     public char toLowerCase(char old) {
         return Character.toLowerCase(old);
     }
 
     public ArrayList<String> readFile(String filename) throws IOException {
         ArrayList<String> list = new ArrayList<String>();
-        BufferedReader br;
-        String line;
-
-        br = new BufferedReader(new FileReader(filename));
+        String line = "";
+        BufferedReader br = new BufferedReader(new FileReader(filename));
 
         while ((line = br.readLine()) != null) {
             list.add(line);
@@ -85,7 +94,11 @@ public class WordModel {
         return list;
     }
 
-    public int getGuessedCharacterSize() {
-        return mGuessedCharacters.size();
+    public String getGuessedChars() {
+        return String.valueOf(mGuessedCharacters);
+    }
+
+    public String getSecretWord() {
+        return mSecretWord;
     }
 }
