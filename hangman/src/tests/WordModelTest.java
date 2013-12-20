@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by rkh on 2013-12-14.
@@ -101,7 +102,7 @@ public class WordModelTest {
     @Test
     public void testGetSecretWordWithGuessedChars() throws IOException {
         //secret word == Banana
-        sut.createSecretWordFromList(sut.readFile("src/tests/test.txt"));
+        sut.createSecretWordFromList(new ArrayList<String>() {{ add("Banana"); }});
         sut.isGuessedCharacter('a');
 
         String expected = "*a*a*a";
@@ -113,12 +114,24 @@ public class WordModelTest {
     @Test
     public void testGetSecretWordWithGuessedCharsFullWord() throws IOException {
         //secret word == Banana
-        sut.createSecretWordFromList(sut.readFile("src/tests/test.txt"));
+        sut.createSecretWordFromList(new ArrayList<String>() {{ add("Banana"); }});
         sut.isGuessedCharacter('b');
         sut.isGuessedCharacter('a');
         sut.isGuessedCharacter('n');
 
         String expected = "Banana";
+        String actual = sut.getSecretWordWithGuessedChars();
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetSecretWordWithGuessedCharsSpacedWord() throws IOException {
+        sut.createSecretWordFromList(new ArrayList<String>() {{ add("Williams pear"); }});
+        sut.isGuessedCharacter('W');
+        sut.isGuessedCharacter('p');
+
+        String expected = "W******* p***";
         String actual = sut.getSecretWordWithGuessedChars();
 
         Assert.assertEquals(expected, actual);

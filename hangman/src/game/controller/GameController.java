@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -42,6 +44,26 @@ public class GameController {
         }
     }
 
+    private void bindEventHandlers() {
+        mGuessButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                doGuess(event);
+            }
+        });
+
+        mGuessField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if(keyEvent.getEventType() == KeyEvent.KEY_PRESSED) {
+                    if(keyEvent.getCode() == KeyCode.ENTER) {
+                        mGuessButton.fire();
+                    }
+                }
+            }
+        });
+    }
+
     private void restart() {
         init();
 
@@ -53,13 +75,7 @@ public class GameController {
 
         mGuessesLabel.setText(String.valueOf(mModel.getMaxNumberOfGuesses() - mModel.getNumberOfGuesses()));
         mWordLabel.setText(mModel.getSecretWordWithGuessedChars());
-
-        mGuessButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                doGuess(event);
-            }
-        });
+        bindEventHandlers();
     }
 
     public void setupStage(Stage stage) {
@@ -74,13 +90,15 @@ public class GameController {
 
         mWordLabel.setText(mModel.getSecretWordWithGuessedChars());
         mGuessesLabel.setText(String.valueOf(mModel.getMaxNumberOfGuesses()-mModel.getNumberOfGuesses()));
+        bindEventHandlers();
+
     }
 
     @FXML
     protected void doGuess(ActionEvent event) {
         mOutputLabel.setText("");
 
-        char[] guess = mGuessField.getText().toCharArray();
+        char[] guess = mGuessField.getText().trim().toCharArray();
 
         if (mModel.validGuess(guess)) {
             if (mModel.guess(guess)) {

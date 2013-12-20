@@ -63,7 +63,10 @@ public class WordModel {
     public String getSecretWordWithGuessedChars() {
         char[] ret = new char[mSecretWord.length()];
         char[] secret = mSecretWord.toCharArray();
-        Arrays.fill(ret, '*');
+
+        for(int x = 0; x < mSecretWord.length(); x++) {
+            ret[x] = secret[x] == 32 ? ' ' : '*';
+        }
 
         for(char guess : mGuessedCharacters) {
             for (int i = 0; i < mSecretWord.length(); i++) {

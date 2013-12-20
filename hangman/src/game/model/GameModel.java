@@ -11,7 +11,7 @@ public class GameModel {
     private int mMaxNumberOfGuesses;
     private int mGuesses = 0;
 
-    public GameModel(WordModel wordmodel, int maxNumberOfGuesses) throws IOException {
+    public GameModel(WordModel wordmodel, int maxNumberOfGuesses) {
         mWordModel = wordmodel;
         mMaxNumberOfGuesses = maxNumberOfGuesses;
     }
@@ -35,6 +35,7 @@ public class GameModel {
 
         for(char ch : guess) {
             char lower = mWordModel.toLowerCase(ch);
+            if (lower == 32) continue; //space
             if (lower < 'a' || lower > 'z') return false;
         }
         return true;
