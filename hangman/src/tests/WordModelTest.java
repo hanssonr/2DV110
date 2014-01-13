@@ -91,15 +91,6 @@ public class WordModelTest {
     }
 
     @Test
-    public void testLowerCaseWithNumber() {
-        Character guess = 'A';
-        Character expected = 'a';
-        Character actual = sut.toLowerCase(guess);
-
-        Assert.assertEquals(expected, actual);
-    }
-
-    @Test
     public void testGetSecretWordWithGuessedChars() throws IOException {
         //secret word == Banana
         sut.createSecretWordFromList(new ArrayList<String>() {{ add("Banana"); }});

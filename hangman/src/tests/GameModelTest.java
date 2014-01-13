@@ -60,6 +60,22 @@ public class GameModelTest {
     }
 
     @Test
+    public void testValidGuessInvalidLowerBoundry() {
+        char[] guess = {96};
+        boolean actual = sut.validGuess(guess);
+
+        Assert.assertFalse(actual);
+    }
+
+    @Test
+    public void testValidGuessInvalidUpperBoundry() {
+        char[] guess = {123};
+        boolean actual = sut.validGuess(guess);
+
+        Assert.assertFalse(actual);
+    }
+
+    @Test
     public void testGetNumberOfGuesses() {
         int expected = 0;
         int actual = sut.getNumberOfGuesses();
@@ -92,6 +108,7 @@ public class GameModelTest {
         Assert.assertEquals(expected, actual);
     }
 
+    // Redundant?
     @Test
     public void testGetSecretWordWithGuessedChars() {
         sut.guess(new char[] {'b'});
@@ -121,5 +138,4 @@ public class GameModelTest {
 
         Assert.assertEquals(expected, actual);
     }
-
 }
